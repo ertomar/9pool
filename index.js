@@ -3,7 +3,7 @@ const cors = require("cors");
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
-var morgan = require("morgan");
+const morgan = require("morgan");
 const mongoString = process.env.DATABASE_URL;
 
 mongoose.connect(mongoString);
@@ -23,7 +23,9 @@ app.use(morgan("combined"));
 app.use(cors());
 app.use(express.json());
 
-const routes = require("./routes/routes");
+const guestRoutes = require("./routes/guestRoutes");
+const userRoutes = require("./routes/userRoutes");
+const adminRoutes = require("./routes/adminRoutes");
 
 app.use(
   "/",
@@ -31,7 +33,10 @@ app.use(
     res.send("9 Pool server is live");
   })
 );
-app.use("/api", routes);
+
+app.use("/api", guestRoutes);
+app.use("/api", userRoutes);
+app.use("/api/admin", adminRoutes);
 
 app.listen(3000, () => {
   console.log(`Server Started at ${3000}`);
